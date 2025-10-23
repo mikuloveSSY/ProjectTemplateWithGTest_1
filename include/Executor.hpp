@@ -4,6 +4,7 @@
 其真正的实现是在子类（派生类）中
 优势：让子类对象在运行时动态地继承和修改父类的成员函数，实现多态运行
 另一方面，虚函数的存在也使得Executor成为一个抽象类，无法实例化，其本身也没有任何数据成员
+而若后面跟着=0，说明是纯虚函数，即强制要在派生类里实现
 */
 namespace adas {
 // 汽车姿态
@@ -14,10 +15,10 @@ struct Pose {
 };
 // 驾驶动作执行器接口
 class Executor {
- public:
+public:
   static Executor *NewExecutor(const Pose &pose = {0, 0, 'N'}) noexcept;
 
- public:
+public:
   // 默认构造函数
   Executor(void) = default;
   // 默认虚析构函数
@@ -27,8 +28,10 @@ class Executor {
   // 不能赋值
   Executor &operator=(const Executor &) = delete;
 
- public:
+public:
   // 查询当前汽车的姿态，纯虚函数，给子类实现
   virtual Pose Query(void) const noexcept = 0;
+  // 新增纯虚函数，用于执行指令序列
+  virtual void Execute(const std::string &commands) noexcept = 0;
 };
-}  // namespace adas
+} // namespace adas

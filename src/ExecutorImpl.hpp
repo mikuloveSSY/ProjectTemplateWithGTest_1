@@ -18,8 +18,10 @@ public:
 
 public:
   // 查询当前汽车姿态
-  // override是用于显式地标记派生类中重写基类虚函数的函数
+  // override是用于显式地标记派生类中重写基类虚函数的函数，增加易读性，且便于编译器的识别
   Pose Query(void) const noexcept override;
+  // 第二阶段新增纯虚函数，执行指令
+  void Execute(const std::string &command) noexcept override;
 
 private:
   // 私有成员

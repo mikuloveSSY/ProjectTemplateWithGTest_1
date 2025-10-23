@@ -14,5 +14,5 @@ Executor *Executor::NewExecutor(const Pose &pose) noexcept {
   // （c++17）创建一个对象，若内存不足，返回空指针
   return new (std::nothrow) ExecutorImpl(pose);
 }
-
+void ExecutorImpl::Execute(const std::string &command) noexcept {}
 } // namespace adas
