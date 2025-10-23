@@ -14,5 +14,40 @@ Executor *Executor::NewExecutor(const Pose &pose) noexcept {
   // （c++17）创建一个对象，若内存不足，返回空指针
   return new (std::nothrow) ExecutorImpl(pose);
 }
-void ExecutorImpl::Execute(const std::string &command) noexcept {}
+void ExecutorImpl::Execute(const std::string &commands) noexcept {
+  // 解析字符串，执行指令
+  for (const auto cmd : commands) {
+    if (cmd == 'M') {
+      if (pose.heading == 'E') {
+        ++pose.x;
+      } else if (pose.heading == 'W') {
+        --pose.x;
+      } else if (pose.heading == 'N') {
+        ++pose.y;
+      } else if (pose.heading == 'S') {
+        --pose.y;
+      }
+    } else if (cmd == 'L') {
+      if (pose.heading == 'E') {
+        pose.heading = 'N';
+      } else if (pose.heading == 'W') {
+        pose.heading = 'S';
+      } else if (pose.heading == 'N') {
+        pose.heading = 'W';
+      } else if (pose.heading == 'S') {
+        pose.heading = 'E';
+      }
+    } else if (cmd == 'R') {
+      if (pose.heading == 'E') {
+        pose.heading = 'S';
+      } else if (pose.heading == 'W') {
+        pose.heading = 'N';
+      } else if (pose.heading == 'N') {
+        pose.heading = 'E';
+      } else if (pose.heading == 'S') {
+        pose.heading = 'W';
+      }
+    }
+  }
+}
 } // namespace adas
