@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>  //提供googletest测试框架
+#include <gtest/gtest.h> //提供googletest测试框架
 
 #include <memory>
 #include <tuple>
@@ -33,7 +33,7 @@ TEST(ExecutorTest, should_return_default_pose_when_without_init_and_command) {
   const Pose target({0, 0, 'N'});
   ASSERT_EQ(target, executor->Query());
 }
-}  // namespace adas
+} // namespace adas
 
 /*tips:
 虽然还没给出Executor的子类实现，但是先写好测试用例代码

@@ -1,0 +1,29 @@
+#pragma once
+#include <string>
+
+#include "Executor.hpp"
+
+namespace adas {
+// Executor的具体实现
+class ExecutorImpl : public Executor {
+public:
+  // 构造函数
+  explicit ExecutorImpl(const Pose &pose) noexcept;
+  // 让编译器默认析构函数
+  ~ExecutorImpl() noexcept = default;
+  // 不能拷贝
+  ExecutorImpl(const ExecutorImpl &) = delete;
+  // 不能赋值
+  ExecutorImpl &operator=(const ExecutorImpl &) = delete;
+
+public:
+  // 查询当前汽车姿态
+  // override是用于显式地标记派生类中重写基类虚函数的函数
+  Pose Query(void) const noexcept override;
+
+private:
+  // 私有成员
+  Pose pose;
+};
+
+} // namespace adas
