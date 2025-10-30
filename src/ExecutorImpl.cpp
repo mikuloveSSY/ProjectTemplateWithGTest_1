@@ -3,8 +3,10 @@
 
 namespace adas {
 
+// 由于头文件里只有声明，所以这里要类外定义构造函数
 ExecutorImpl::ExecutorImpl(const Pose &pose) noexcept : pose(pose) {}
 Pose ExecutorImpl::Query(void) const noexcept { return pose; }
+
 /*
 std::nothrow是标准库里的一个常量，用于指示分配内存时不抛出异常
 它是std::nothrow_t类型的实例

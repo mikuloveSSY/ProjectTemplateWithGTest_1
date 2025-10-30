@@ -122,6 +122,7 @@ TEST(ExecutorTest, should_return_facing_E_given_command_is_R_and_facing_is_N) {
 } // namespace adas
 
 /*tips:
+在最早构建工程代码的时候
 虽然还没给出Executor的子类实现，但是先写好测试用例代码
 这是业界强调的“测试驱动开发”
 */
