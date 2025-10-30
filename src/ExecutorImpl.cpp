@@ -6,9 +6,10 @@ namespace adas {
 
 // 由于头文件里只有声明，所以这里要类外定义构造函数
 ExecutorImpl::ExecutorImpl(const Pose &pose) noexcept
-    : pose(pose), isFast(false) {}
+    : pose(pose), isfast(false) {}
 Pose ExecutorImpl::Query(void) const noexcept { return pose; }
-
+void ExecutorImpl::Fast(void) noexcept { isfast = !isfast; }
+bool ExecutorImpl::IsFast(void) const noexcept { return isfast; }
 /*
 std::nothrow是标准库里的一个常量，用于指示分配内存时不抛出异常
 它是std::nothrow_t类型的实例
@@ -30,7 +31,7 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept {
     } else if (cmd == 'R') {
       cmder = std::make_unique<TurnRightCommand>();
     } else if (cmd == 'F') {
-      isFast = !isFast;
+      Fast();
     }
     if (cmder) {
       // 多态，cmder作为父类指向不同子类，调用的是各自下的命令
@@ -39,6 +40,7 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept {
   }
 }
 
+// 动作函数
 void ExecutorImpl::Move() noexcept {
   if (pose.heading == 'E') {
     ++pose.x;
