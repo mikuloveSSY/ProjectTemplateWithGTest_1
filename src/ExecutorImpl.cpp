@@ -23,15 +23,7 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept {
     if (cmd == 'M') {
       Move();
     } else if (cmd == 'L') {
-      if (pose.heading == 'E') {
-        pose.heading = 'N';
-      } else if (pose.heading == 'W') {
-        pose.heading = 'S';
-      } else if (pose.heading == 'N') {
-        pose.heading = 'W';
-      } else if (pose.heading == 'S') {
-        pose.heading = 'E';
-      }
+      TurnLeft();
     } else if (cmd == 'R') {
       if (pose.heading == 'E') {
         pose.heading = 'S';
@@ -57,6 +49,17 @@ void ExecutorImpl::Move() noexcept {
     ++pose.y;
   } else if (pose.heading == 'S') {
     --pose.y;
+  }
+}
+void ExecutorImpl::TurnLeft() noexcept {
+  if (pose.heading == 'E') {
+    pose.heading = 'N';
+  } else if (pose.heading == 'W') {
+    pose.heading = 'S';
+  } else if (pose.heading == 'N') {
+    pose.heading = 'W';
+  } else if (pose.heading == 'S') {
+    pose.heading = 'E';
   }
 }
 } // namespace adas
