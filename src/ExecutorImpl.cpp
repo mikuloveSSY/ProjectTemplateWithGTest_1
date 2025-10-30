@@ -4,7 +4,8 @@
 namespace adas {
 
 // 由于头文件里只有声明，所以这里要类外定义构造函数
-ExecutorImpl::ExecutorImpl(const Pose &pose) noexcept : pose(pose) {}
+ExecutorImpl::ExecutorImpl(const Pose &pose) noexcept
+    : pose(pose), isFast(false) {}
 Pose ExecutorImpl::Query(void) const noexcept { return pose; }
 
 /*
@@ -20,15 +21,7 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept {
   // 解析字符串，执行指令
   for (const auto cmd : commands) {
     if (cmd == 'M') {
-      if (pose.heading == 'E') {
-        ++pose.x;
-      } else if (pose.heading == 'W') {
-        --pose.x;
-      } else if (pose.heading == 'N') {
-        ++pose.y;
-      } else if (pose.heading == 'S') {
-        --pose.y;
-      }
+      Move();
     } else if (cmd == 'L') {
       if (pose.heading == 'E') {
         pose.heading = 'N';
@@ -49,7 +42,21 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept {
       } else if (pose.heading == 'S') {
         pose.heading = 'W';
       }
+    } else if (cmd == 'F') {
+      isFast = !isFast;
     }
+  }
+}
+
+void ExecutorImpl::Move() noexcept {
+  if (pose.heading == 'E') {
+    ++pose.x;
+  } else if (pose.heading == 'W') {
+    --pose.x;
+  } else if (pose.heading == 'N') {
+    ++pose.y;
+  } else if (pose.heading == 'S') {
+    --pose.y;
   }
 }
 } // namespace adas

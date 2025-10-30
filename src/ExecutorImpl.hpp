@@ -4,8 +4,8 @@
 #include "Executor.hpp"
 
 namespace adas {
-// Executor的具体实现
-class ExecutorImpl : public Executor {
+// Executor的具体实现（Impl全称就是Implementation，即“实现”）,这里的final关键字表示该类不能被继承
+class ExecutorImpl final : public Executor {
 public:
   // 构造函数（带explicit是让编译器不能隐式转换参数去调用构造函数）
   explicit ExecutorImpl(const Pose &pose) noexcept;
@@ -26,6 +26,10 @@ public:
 private:
   // 私有成员
   Pose pose;
+  bool isFast;
+
+private:
+  void Move(void) noexcept;
 };
 
 } // namespace adas
