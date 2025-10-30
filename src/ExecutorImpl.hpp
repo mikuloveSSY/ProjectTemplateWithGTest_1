@@ -35,12 +35,25 @@ private:
   void TurnLeft(void) noexcept;
   void TurnRight(void) noexcept;
 
+  // 把执行动作封装到类里是为了后面的多态运行，不用重复得调用同几个语句了
 private:
   // 私有内部类，只能靠内部的函数或者指针来创建并调用
   class MoveCommand final { // 嵌套类
   public:
     // 执行Move动作，委托给一个执行器来完成动作
     void DoOperate(ExecutorImpl &executor) const noexcept { executor.Move(); }
+  };
+  class TurnLeftCommand final {
+  public:
+    void DoOperate(ExecutorImpl &executor) const noexcept {
+      executor.TurnLeft();
+    }
+  };
+  class TurnRightCommand final {
+  public:
+    void DoOperate(ExecutorImpl &executor) const noexcept {
+      executor.TurnRight();
+    }
   };
 };
 

@@ -21,13 +21,16 @@ Executor *Executor::NewExecutor(const Pose &pose) noexcept {
 void ExecutorImpl::Execute(const std::string &commands) noexcept {
   // 解析字符串，执行指令
   for (const auto cmd : commands) {
+    // 用上类后，每一句都有cmder->DoOperate(*this); 已经接近多态了
     if (cmd == 'M') {
       // 利用智能指针来创建并使用智能指针来管理，利于避免内存泄漏
       std::unique_ptr<MoveCommand> cmder = std::make_unique<MoveCommand>();
       // 通过内部类的智能指针调用内部类的函数
       cmder->DoOperate(*this);
     } else if (cmd == 'L') {
-      TurnLeft();
+      std::unique_ptr<TurnLeftCommand> cmder =
+          std::make_unique<TurnLeftCommand>();
+      cmder->DoOperate(*this);
     } else if (cmd == 'R') {
       TurnRight();
     } else if (cmd == 'F') {
