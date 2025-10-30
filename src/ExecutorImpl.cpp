@@ -21,22 +21,20 @@ Executor *Executor::NewExecutor(const Pose &pose) noexcept {
 void ExecutorImpl::Execute(const std::string &commands) noexcept {
   // 解析字符串，执行指令
   for (const auto cmd : commands) {
-    // 用上类后，每一句都有cmder->DoOperate(*this); 已经接近多态了
+    std::unique_ptr<ICommand> cmder;
+    // 父类指针指向不同子类，类似于子类隐式转换成父类的样子
     if (cmd == 'M') {
-      // 利用智能指针来创建并使用智能指针来管理，利于避免内存泄漏
-      std::unique_ptr<MoveCommand> cmder = std::make_unique<MoveCommand>();
-      // 通过内部类的智能指针调用内部类的函数
-      cmder->DoOperate(*this);
+      cmder = std::make_unique<MoveCommand>();
     } else if (cmd == 'L') {
-      std::unique_ptr<TurnLeftCommand> cmder =
-          std::make_unique<TurnLeftCommand>();
-      cmder->DoOperate(*this);
+      cmder = std::make_unique<TurnLeftCommand>();
     } else if (cmd == 'R') {
-      std::unique_ptr<TurnRightCommand> cmder =
-          std::make_unique<TurnRightCommand>();
-      cmder->DoOperate(*this);
+      cmder = std::make_unique<TurnRightCommand>();
     } else if (cmd == 'F') {
       isFast = !isFast;
+    }
+    if (cmder) {
+      // 多态，cmder作为父类指向不同子类，调用的是各自下的命令
+      cmder->DoOperate(*this);
     }
   }
 }

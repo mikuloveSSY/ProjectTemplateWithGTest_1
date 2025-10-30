@@ -35,23 +35,33 @@ private:
   void TurnLeft(void) noexcept;
   void TurnRight(void) noexcept;
 
-  // 把执行动作封装到类里是为了后面的多态运行，不用重复得调用同几个语句了
+private:
+  // 下面三个类虽然是把执行动作封装了，但还是有执行动作的函数接口重复，所以这个类的目的就是把调用这三个类的执行动作的‘接口’抽象化从而达到多态运行
+  class ICommand {
+  public:
+    // 析构函数也要虚，因为多态运行时，析构执行时的对象也是多态类型的
+    virtual ~ICommand() noexcept = default;
+    virtual void DoOperate(ExecutorImpl &executor) const noexcept = 0; // 纯虚
+  };
+
 private:
   // 私有内部类，只能靠内部的函数或者指针来创建并调用
-  class MoveCommand final { // 嵌套类
+  class MoveCommand final : public ICommand { // 嵌套类
   public:
-    // 执行Move动作，委托给一个执行器来完成动作
-    void DoOperate(ExecutorImpl &executor) const noexcept { executor.Move(); }
+    // 执行Move动作，委托给一个执行器来完成动作(override表示强制重写虚函数)
+    void DoOperate(ExecutorImpl &executor) const noexcept override {
+      executor.Move();
+    }
   };
-  class TurnLeftCommand final {
+  class TurnLeftCommand final : public ICommand {
   public:
-    void DoOperate(ExecutorImpl &executor) const noexcept {
+    void DoOperate(ExecutorImpl &executor) const noexcept override {
       executor.TurnLeft();
     }
   };
-  class TurnRightCommand final {
+  class TurnRightCommand final : public ICommand {
   public:
-    void DoOperate(ExecutorImpl &executor) const noexcept {
+    void DoOperate(ExecutorImpl &executor) const noexcept override {
       executor.TurnRight();
     }
   };
