@@ -77,6 +77,12 @@ private:
       executor.TurnRight();
     }
   };
+  class FastCommand final : public ICommand {
+  public:
+    void DoOperate(ExecutorImpl &executor) const noexcept override {
+      executor.isfast = !executor.isfast;
+    };
+  };
 };
 
 } // namespace adas

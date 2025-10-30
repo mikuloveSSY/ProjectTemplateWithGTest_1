@@ -31,7 +31,7 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept {
     } else if (cmd == 'R') {
       cmder = std::make_unique<TurnRightCommand>();
     } else if (cmd == 'F') {
-      Fast();
+      cmder = std::make_unique<FastCommand>();
     }
     if (cmder) {
       // 多态，cmder作为父类指向不同子类，调用的是各自下的命令
