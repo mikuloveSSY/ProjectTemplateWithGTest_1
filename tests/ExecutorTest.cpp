@@ -1,17 +1,10 @@
-#include <gtest/gtest.h> //提供googletest测试框架
-
-#include <memory>
-#include <tuple>
-
 #include "Executor.hpp"
+#include "PoseEq.hpp"
+#include <gtest/gtest.h> //提供googletest测试框架
+#include <memory>
 
 namespace adas {
-// 重载Pose的==
-bool operator==(const Pose &lhs, const Pose &rhs) {
-  // tie用于创建元组接受多值进行比较，按照字段顺序逐个比较
-  return std::tie(lhs.x, lhs.y, lhs.heading) ==
-         std::tie(rhs.x, rhs.y, rhs.heading);
-}
+
 // TEST是一个宏，包括两个参数：测试套件，测试名（注意不是字符串，不需要""），一个测试套件可以包括多个测试
 //  下面两个测试用例
 //  1
