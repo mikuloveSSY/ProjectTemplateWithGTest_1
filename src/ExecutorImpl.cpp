@@ -1,4 +1,5 @@
 #include "ExecutorImpl.hpp"
+#include <memory>
 #include <new>
 
 namespace adas {
@@ -21,7 +22,10 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept {
   // 解析字符串，执行指令
   for (const auto cmd : commands) {
     if (cmd == 'M') {
-      Move();
+      // 利用智能指针来创建并使用智能指针来管理，利于避免内存泄漏
+      std::unique_ptr<MoveCommand> cmder = std::make_unique<MoveCommand>();
+      // 通过内部类的智能指针调用内部类的函数
+      cmder->DoOperate(*this);
     } else if (cmd == 'L') {
       TurnLeft();
     } else if (cmd == 'R') {

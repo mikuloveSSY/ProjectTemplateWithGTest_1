@@ -4,6 +4,7 @@
 #include "Executor.hpp"
 
 namespace adas {
+
 // Executor的具体实现（Impl全称就是Implementation，即“实现”）,这里的final关键字表示该类不能被继承
 class ExecutorImpl final : public Executor {
 public:
@@ -29,9 +30,18 @@ private:
   bool isFast;
 
 private:
+  // 私有函数
   void Move(void) noexcept;
   void TurnLeft(void) noexcept;
   void TurnRight(void) noexcept;
+
+private:
+  // 私有内部类，只能靠内部的函数或者指针来创建并调用
+  class MoveCommand final { // 嵌套类
+  public:
+    // 执行Move动作，委托给一个执行器来完成动作
+    void DoOperate(ExecutorImpl &executor) const noexcept { executor.Move(); }
+  };
 };
 
 } // namespace adas
