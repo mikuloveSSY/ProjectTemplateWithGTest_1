@@ -12,11 +12,16 @@ class PoseHandler final
     PoseHandler(const PoseHandler &) = delete;            // 禁止拷贝构造
     PoseHandler &operator=(const PoseHandler &) = delete; // 禁止拷贝赋值
   public:
-    void Move(void) noexcept;
+    void Forward(void) noexcept;
+    void Backward(void) noexcept;
     void TurnLeft(void) noexcept;
     void TurnRight(void) noexcept;
     void Fast(void) noexcept;
     bool IsFast(void) const noexcept;
+
+    void Reverse(void) noexcept;
+    bool IsReverse(void) const noexcept;
+
     Pose Query(void) const noexcept;
 
   private:
@@ -24,6 +29,7 @@ class PoseHandler final
     Point point;
     const Direction *facing;
     bool isfast{false};
+    bool isreverse{false};
 };
 
 } // namespace adas

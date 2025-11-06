@@ -34,9 +34,23 @@ class MoveCommand final //: public ICommand
     {
         if (poseHandler.IsFast())
         {
-            poseHandler.Move();
+            if (poseHandler.IsReverse())
+            {
+                poseHandler.Backward();
+            }
+            else
+            {
+                poseHandler.Forward();
+            }
         }
-        poseHandler.Move();
+        if (poseHandler.IsReverse())
+        {
+            poseHandler.Backward();
+        }
+        else
+        {
+            poseHandler.Forward();
+        }
     };
 };
 class TurnLeftCommand final //: public ICommand
@@ -46,9 +60,23 @@ class TurnLeftCommand final //: public ICommand
     {
         if (poseHandler.IsFast())
         {
-            poseHandler.Move();
+            if (poseHandler.IsReverse())
+            {
+                poseHandler.Backward();
+            }
+            else
+            {
+                poseHandler.Forward();
+            }
         }
-        poseHandler.TurnLeft();
+        if (poseHandler.IsReverse())
+        {
+            poseHandler.TurnRight();
+        }
+        else
+        {
+            poseHandler.TurnLeft();
+        }
     };
 };
 class TurnRightCommand final //: public ICommand
@@ -58,10 +86,24 @@ class TurnRightCommand final //: public ICommand
     {
         if (poseHandler.IsFast())
         {
-            poseHandler.Move();
+            if (poseHandler.IsReverse())
+            {
+                poseHandler.Backward();
+            }
+            else
+            {
+                poseHandler.Forward();
+            }
         }
-        poseHandler.TurnRight();
-    };
+        if (poseHandler.IsReverse())
+        {
+            poseHandler.TurnLeft();
+        }
+        else
+        {
+            poseHandler.TurnRight();
+        }
+    }
 };
 class FastCommand final //: public ICommand
 {
@@ -71,5 +113,12 @@ class FastCommand final //: public ICommand
         poseHandler.Fast();
     };
 };
-
+class ReverseCommand final
+{
+  public:
+    void operator()(PoseHandler &poseHandler) noexcept
+    {
+        poseHandler.Reverse();
+    };
+};
 } // namespace adas
