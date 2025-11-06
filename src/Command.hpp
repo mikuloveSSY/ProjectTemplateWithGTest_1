@@ -1,5 +1,5 @@
-#pragma
-#include "ExecutorImpl.hpp"
+#pragma once
+#include "PoseHandler.hpp"
 
 namespace adas
 {
@@ -9,52 +9,52 @@ class ICommand
   public:
     // 析构函数也要虚，因为多态运行时，析构执行时的对象也是多态类型的
     virtual ~ICommand() noexcept = default;
-    virtual void DoOperate(ExecutorImpl &executor) const noexcept = 0; // 纯虚
+    virtual void DoOperate(PoseHandler &poseHandler) const noexcept = 0; // 纯虚
 };
 // 注意，对于加速状态的判断也用函数来调用，这也是面对对象编程的习惯：不随意使用private数据成员
 class MoveCommand final : public ICommand
 { // 嵌套类
   public:
     // 执行Move动作，委托给一个执行器来完成动作(override表示强制重写虚函数)
-    void DoOperate(ExecutorImpl &executor) const noexcept override
+    void DoOperate(PoseHandler &poseHandler) const noexcept override
     {
-        if (executor.IsFast())
+        if (poseHandler.IsFast())
         {
-            executor.Move();
+            poseHandler.Move();
         }
-        executor.Move();
+        poseHandler.Move();
     }
 };
 class TurnLeftCommand final : public ICommand
 {
   public:
-    void DoOperate(ExecutorImpl &executor) const noexcept override
+    void DoOperate(PoseHandler &poseHandler) const noexcept override
     {
-        if (executor.IsFast())
+        if (poseHandler.IsFast())
         {
-            executor.Move();
+            poseHandler.Move();
         }
-        executor.TurnLeft();
+        poseHandler.TurnLeft();
     }
 };
 class TurnRightCommand final : public ICommand
 {
   public:
-    void DoOperate(ExecutorImpl &executor) const noexcept override
+    void DoOperate(PoseHandler &poseHandler) const noexcept override
     {
-        if (executor.IsFast())
+        if (poseHandler.IsFast())
         {
-            executor.Move();
+            poseHandler.Move();
         }
-        executor.TurnRight();
+        poseHandler.TurnRight();
     }
 };
 class FastCommand final : public ICommand
 {
   public:
-    void DoOperate(ExecutorImpl &executor) const noexcept override
+    void DoOperate(PoseHandler &poseHandler) const noexcept override
     {
-        executor.Fast();
+        poseHandler.Fast();
     };
 };
 } // namespace adas

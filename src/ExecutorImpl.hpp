@@ -1,7 +1,7 @@
 #pragma once
-#include <string>
-
 #include "Executor.hpp"
+#include "PoseHandler.hpp"
+#include <string>
 
 namespace adas
 {
@@ -10,7 +10,7 @@ namespace adas
 class ExecutorImpl final : public Executor
 {
   public:
-    // 构造函数（带explicit是让编译器不能隐式转换参数去调用构造函数）
+    // 构造函数声明（带explicit是让编译器不能隐式转换参数去调用构造函数）
     explicit ExecutorImpl(const Pose &pose) noexcept;
     // 让编译器默认析构函数
     ~ExecutorImpl() noexcept = default;
@@ -27,17 +27,7 @@ class ExecutorImpl final : public Executor
     void Execute(const std::string &command) noexcept override;
 
   private:
-    // 私有成员
-    Pose pose;
-    bool isfast{false}; //(c++11)非静态成员初始化
-
-  public:
-    // 改成公有，使得指令处理类可以使用该函数
-    void Move(void) noexcept;
-    void TurnLeft(void) noexcept;
-    void TurnRight(void) noexcept;
-    void Fast(void) noexcept;
-    bool IsFast(void) const noexcept;
+    PoseHandler poseHandler; // 状态管理类
 };
 
 } // namespace adas
