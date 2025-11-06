@@ -32,14 +32,10 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept
     // 表驱动
     std::unordered_map<char, std::function<void(PoseHandler & PoseHandler)>> cmderMap;
     // 建立操作与指令的映射关系,智能指针的值就存储在键值对里
-    MoveCommand moveCommand;
-    cmderMap.emplace('M', moveCommand.operate);
-    TurnLeftCommand turnLeftCommand;
-    cmderMap.emplace('L', turnLeftCommand.operate);
-    TurnRightCommand turnRightCommand;
-    cmderMap.emplace('R', turnRightCommand.operate);
-    FastCommand fastCommand;
-    cmderMap.emplace('F', fastCommand.operate);
+    cmderMap.emplace('M', MoveCommand());
+    cmderMap.emplace('L', TurnLeftCommand());
+    cmderMap.emplace('R', TurnRightCommand());
+    cmderMap.emplace('F', FastCommand());
     // cmderMap.emplace('B', std::make_unique<ReverseCommand>());
     // 解析字符串，执行指令
     for (const auto cmd : commands)

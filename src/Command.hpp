@@ -13,7 +13,9 @@ namespace adas
 //     virtual ~ICommand() noexcept = default;
 //     virtual void DoOperate(PoseHandler &poseHandler) const noexcept = 0; // 纯虚
 // };
-// 注意，对于加速状态的判断也用函数来调用，这也是面对对象编程的习惯：不随意使用private数据成员
+
+// operator() 是一个特殊的函数，称为函数调用运算符。它允许一个对象像函数一样被调用。
+// 当你定义了一个重载了operator()的类时，你可以创建一个类的实例，然后像调用函数一样调用它。
 class MoveCommand final //: public ICommand
 {
   public:
@@ -28,7 +30,8 @@ class MoveCommand final //: public ICommand
     // }
 
     // 定义函数对象operate,接受参数PoseHandler，返回void
-    const std::function<void(PoseHandler &PoseHandler)> operate = [](PoseHandler &poseHandler) noexcept {
+    void operator()(PoseHandler &poseHandler) noexcept
+    {
         if (poseHandler.IsFast())
         {
             poseHandler.Move();
@@ -39,7 +42,8 @@ class MoveCommand final //: public ICommand
 class TurnLeftCommand final //: public ICommand
 {
   public:
-    const std::function<void(PoseHandler &PoseHandler)> operate = [](PoseHandler &poseHandler) noexcept {
+    void operator()(PoseHandler &poseHandler) noexcept
+    {
         if (poseHandler.IsFast())
         {
             poseHandler.Move();
@@ -50,7 +54,8 @@ class TurnLeftCommand final //: public ICommand
 class TurnRightCommand final //: public ICommand
 {
   public:
-    const std::function<void(PoseHandler &PoseHandler)> operate = [](PoseHandler &poseHandler) noexcept {
+    void operator()(PoseHandler &poseHandler) noexcept
+    {
         if (poseHandler.IsFast())
         {
             poseHandler.Move();
@@ -61,7 +66,8 @@ class TurnRightCommand final //: public ICommand
 class FastCommand final //: public ICommand
 {
   public:
-    const std::function<void(PoseHandler &PoseHandler)> operate = [](PoseHandler &poseHandler) noexcept {
+    void operator()(PoseHandler &poseHandler) noexcept
+    {
         poseHandler.Fast();
     };
 };
