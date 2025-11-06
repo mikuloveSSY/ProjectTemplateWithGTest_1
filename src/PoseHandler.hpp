@@ -1,4 +1,5 @@
 #pragma once
+#include "Direction.hpp"
 #include "Executor.hpp"
 
 // 由于ExcecutorImpl与ICommand里面的函数都用到了对方的类，互相依赖，这不好，所以要把造成依赖的共同成员抽离出来
@@ -19,7 +20,9 @@ class PoseHandler final
     Pose Query(void) const noexcept;
 
   private:
-    Pose pose;
+    // 使用point与direction替换pose，使变换更整体
+    Point point;
+    const Direction *facing;
     bool isfast{false};
 };
 
