@@ -2,6 +2,7 @@
 #include "Command.hpp"
 #include <memory>
 #include <new>
+#include <unordered_map>
 
 namespace adas
 {
@@ -28,31 +29,22 @@ Executor *Executor::NewExecutor(const Pose &pose) noexcept
 
 void ExecutorImpl::Execute(const std::string &commands) noexcept
 {
+    // 表驱动
+    std::unordered_map<char, std::unique_ptr<ICommand>> cmderMap;
+    // 建立操作与指令的映射关系,智能指针的值就存储在键值对里
+    cmderMap.emplace('M', std::make_unique<MoveCommand>());
+    cmderMap.emplace('L', std::make_unique<TurnLeftCommand>());
+    cmderMap.emplace('R', std::make_unique<TurnRightCommand>());
+    cmderMap.emplace('F', std::make_unique<FastCommand>());
+    // cmderMap.emplace('B', std::make_unique<ReverseCommand>());
     // 解析字符串，执行指令
     for (const auto cmd : commands)
     {
-        std::unique_ptr<ICommand> cmder;
-        // 父类指针指向不同子类，类似于子类隐式转换成父类的样子
-        if (cmd == 'M')
+        // find返回该键值对（即map元素的迭代器）
+        const auto it = cmderMap.find(cmd);
+        if (it != cmderMap.end())
         {
-            cmder = std::make_unique<MoveCommand>();
-        }
-        else if (cmd == 'L')
-        {
-            cmder = std::make_unique<TurnLeftCommand>();
-        }
-        else if (cmd == 'R')
-        {
-            cmder = std::make_unique<TurnRightCommand>();
-        }
-        else if (cmd == 'F')
-        {
-            cmder = std::make_unique<FastCommand>();
-        }
-        if (cmder)
-        {
-            // 多态，cmder作为父类指向不同子类，调用的是各自下的命令
-            cmder->DoOperate(poseHandler);
+            it->second->DoOperate(poseHandler);
         }
     }
 }
