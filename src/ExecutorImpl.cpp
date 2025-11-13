@@ -37,7 +37,8 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept
     // lambda表达式，对于链表遍历到的每一个元素，执行该表达式
     // 这样每一个字符对应的操作都对posHandler执行了
     std::for_each(cmders.begin(), cmders.end(),
-                  [this](const std::function<void(PoseHandler & poseHandler)> &cmder) noexcept { cmder(poseHandler); });
+                  // 注意，为了表达式里能访问ExecutorIml类的成员，要捕获外部的this指针
+                  [this](const Cmder &cmder) noexcept { cmder(poseHandler).DoOperate(poseHandler); });
 }
 
 } // namespace adas

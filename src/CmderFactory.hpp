@@ -9,7 +9,7 @@
 namespace adas
 {
 // 使用using来简化定义名称（功能类似于typedef）
-using Cmder = std::function<void(PoseHandler &posHandler)>;
+using Cmder = std::function<ActionGroup(PoseHandler &poseHandler)>;
 using CmderList = std::list<Cmder>;
 // 该类将被用于单例模式
 class CmderFactory final
