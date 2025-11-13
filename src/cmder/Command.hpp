@@ -1,6 +1,6 @@
 #pragma once
+#include "..\core\PoseHandler.hpp"
 #include "ActionGroup.hpp"
-#include "PoseHandler.hpp"
 #include <functional> // functional提供函数包装器
 
 namespace adas
@@ -86,4 +86,36 @@ class ReverseCommand final
     }
 };
 
+class TurnRoundCommand final
+{
+  public:
+    ActionGroup operator()(PoseHandler &poseHandler) const noexcept
+    {
+        if (poseHandler.IsReverse())
+        {
+            // 倒车状态下不动
+            return ActionGroup();
+        }
+        else
+        { // 返回倒车的指令值集对象
+            if (poseHandler.IsFast())
+            {
+                return ActionGroup({
+                    ActionType::FORWARD_1_STEP_ACTION,
+                    ActionType::TURNLEFT_ACTION,
+                    ActionType::FORWARD_1_STEP_ACTION,
+                    ActionType::TURNLEFT_ACTION,
+                });
+            }
+            else
+            {
+                return ActionGroup({
+                    ActionType::TURNLEFT_ACTION,
+                    ActionType::FORWARD_1_STEP_ACTION,
+                    ActionType::TURNLEFT_ACTION,
+                });
+            }
+        }
+    }
+};
 } // namespace adas

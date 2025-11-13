@@ -1,7 +1,7 @@
 #include "ExecutorImpl.hpp"
 // #include "Command.hpp"
-#include "CmderFactory.hpp"
-#include "Singleton.hpp"
+#include "cmder\CmderFactory.hpp"
+#include "core\Singleton.hpp"
 #include <algorithm> //要用for_each函数
 // #include <memory>
 // #include <new>

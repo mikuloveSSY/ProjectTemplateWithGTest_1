@@ -22,7 +22,7 @@ TEST(ExecutorTurnRoundTest, should_fast_tr_build_forward_left_forward_left)
     ASSERT_EQ(target, executor->Query());
 }
 // BTR
-TEST(ExecutorTurnRoundTest, should_fast_tr_build_forward_left_forward_left)
+TEST(ExecutorTurnRoundTest, in_the_B_state_the_reverse_command_will_be_ignored)
 {
     std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'E'}));
     executor->Execute("BTR");
