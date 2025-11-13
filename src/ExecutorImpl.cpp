@@ -1,8 +1,11 @@
 #include "ExecutorImpl.hpp"
-#include "Command.hpp"
-#include <memory>
-#include <new>
-#include <unordered_map>
+// #include "Command.hpp"
+#include "CmderFactory.hpp"
+#include "Singleton.hpp"
+#include <algorithm> //要用for_each函数
+// #include <memory>
+// #include <new>
+// #include <unordered_map>
 
 namespace adas
 {
@@ -29,27 +32,12 @@ Executor *Executor::NewExecutor(const Pose &pose) noexcept
 
 void ExecutorImpl::Execute(const std::string &commands) noexcept
 {
-    // 表驱动
-    std::unordered_map<char, std::function<void(PoseHandler & PoseHandler)>> cmderMap{
-        {'M', MoveCommand()}, {'L', TurnLeftCommand()}, {'R', TurnRightCommand()},
-        {'F', FastCommand()}, {'B', ReverseCommand()},
-    };
-    // 建立操作与指令的映射关系,智能指针的值就存储在键值对里
-    // cmderMap.emplace('M', MoveCommand());
-    // cmderMap.emplace('L', TurnLeftCommand());
-    // cmderMap.emplace('R', TurnRightCommand());
-    // cmderMap.emplace('F', FastCommand());
-    // cmderMap.emplace('B', std::make_unique<ReverseCommand>());
-    // 解析字符串，执行指令
-    for (const auto cmd : commands)
-    {
-        // find返回该键值对（即map元素的迭代器）
-        const auto it = cmderMap.find(cmd);
-        if (it != cmderMap.end())
-        {
-            it->second(poseHandler);
-        }
-    }
+    // 获取操作顺序链表
+    const auto cmders = Singleton<CmderFactory>::Instance().GetCmders(commands);
+    // lambda表达式，对于链表遍历到的每一个元素，执行该表达式
+    // 这样每一个字符对应的操作都对posHandler执行了
+    std::for_each(cmders.begin(), cmders.end(),
+                  [this](const std::function<void(PoseHandler & poseHandler)> &cmder) noexcept { cmder(poseHandler); });
 }
 
 } // namespace adas
