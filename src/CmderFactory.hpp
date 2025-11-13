@@ -22,7 +22,7 @@ class CmderFactory final
     CmderFactory &operator=(const CmderFactory &) = delete;
 
   public:
-    // 将命令转化成一系列的操作构成的顺序链表
+    // 将命令这种字符串转化成一系列的由操作的GroupAction执行对象构成的顺序链表，再由这些对象各自完成自己对应的具体操作
     CmderList GetCmders(const std::string &commands) const noexcept
     {
         CmderList list;
@@ -38,6 +38,7 @@ class CmderFactory final
     }
 
   private:
+    // 注意，原先map里的存储的值对应的是直接的操作函数，现在这些值则是对应生成的ActionGroup对象
     std::unordered_map<char, Cmder> cmderMap{
         {'M', MoveCommand()}, {'L', TurnLeftCommand()}, {'R', TurnRightCommand()},
         {'F', FastCommand()}, {'B', ReverseCommand()},
