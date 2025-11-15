@@ -1,6 +1,10 @@
 #include "ExecutorImpl.hpp"
 // #include "Command.hpp"
+#include "cmder\BusOrchestrator.hpp"
 #include "cmder\CmderFactory.hpp"
+#include "cmder\CmderOrchestrator.hpp"
+#include "cmder\NormalOrchestrator.hpp"
+#include "cmder\SportsCarOrchestrator.hpp"
 #include "core\Singleton.hpp"
 #include <algorithm> //要用for_each函数
 // #include <memory>
@@ -10,7 +14,8 @@
 namespace adas
 {
 // 构造函数
-ExecutorImpl::ExecutorImpl(const Pose &pose) noexcept : poseHandler(pose)
+ExecutorImpl::ExecutorImpl(const Pose &pose, CmderOrchestrator *orchestrator) noexcept
+    : poseHandler(pose), orchestrator(orchestrator)
 {
 }
 
@@ -26,8 +31,21 @@ std::nothrow是标准库里的一个常量，用于指示分配内存时不抛�
 */
 Executor *Executor::NewExecutor(const Pose &pose, const ExecutorType executorType) noexcept
 {
+    CmderOrchestrator *orchestrator = nullptr;
+    switch (executorType)
+    {
+    case ExecutorType::NORMAL:
+        orchestrator = new NormalOrchestrator();
+        break;
+    case ExecutorType::SPORTS_CAR:
+        orchestrator = new SportsCarOrchestrator();
+        break;
+    case ExecutorType::BUS:
+        orchestrator = new BusOrchestrator();
+        break;
+    }
     // （c++17）创建一个对象，若内存不足，返回空指针
-    return new (std::nothrow) ExecutorImpl(pose);
+    return new (std::nothrow) ExecutorImpl(pose, orchestrator);
 }
 
 void ExecutorImpl::Execute(const std::string &commands) noexcept
@@ -38,7 +56,7 @@ void ExecutorImpl::Execute(const std::string &commands) noexcept
     // 这样每一个字符对应的操作都对posHandler执行了
     std::for_each(cmders.begin(), cmders.end(),
                   // 注意，为了表达式里能访问ExecutorIml类的成员，要捕获外部的this指针
-                  [this](const Cmder &cmder) noexcept { cmder(poseHandler).DoOperate(poseHandler); });
+                  [this](const Cmder &cmder) noexcept { cmder(poseHandler, *orchestrator).DoOperate(poseHandler); });
 }
 
 } // namespace adas

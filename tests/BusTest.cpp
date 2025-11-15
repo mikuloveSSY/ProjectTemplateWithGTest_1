@@ -57,7 +57,7 @@ TEST_F(BusTest, should_return_x_plus_1_and_facing_N_given_command_is_L_and_facin
 // BL
 TEST_F(BusTest, should_return_x_minus_1_and_facing_S_given_command_is_BL_and_facing_is_E)
 {
-    executor->Execute("FM");
+    executor->Execute("BL");
     const Pose target({-1, 0, 'S'});
     ASSERT_EQ(target, executor->Query());
 }

@@ -9,7 +9,7 @@
 namespace adas
 {
 // 使用using来简化定义名称（功能类似于typedef）
-using Cmder = std::function<ActionGroup(PoseHandler &poseHandler)>;
+using Cmder = std::function<ActionGroup(PoseHandler &poseHandler, const CmderOrchestrator &orchestrator)>;
 using CmderList = std::list<Cmder>;
 // 该类将被用于单例模式
 class CmderFactory final
@@ -31,7 +31,7 @@ class CmderFactory final
     void ReplaceAll(std::string &inout, std::string_view what, std::string_view with) const noexcept;
 
   private:
-    // 注意，原先map里的存储的值对应的是直接的操作函数，现在这些值则是对应生成的ActionGroup对象
+    // 注意，表面上mao的值是对象，但实际上创建完对象后，这些Command对象被隐转换成了里面的成员函数（参考自定义的Cmder类型），所以最终map的值存的是各自的成员函数
     std::unordered_map<char, Cmder> cmderMap{
         {'M', MoveCommand()}, {'L', TurnLeftCommand()}, {'R', TurnRightCommand()},
         {'F', FastCommand()}, {'B', ReverseCommand()},  {'Z', TurnRoundCommand()},
